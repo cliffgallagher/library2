@@ -1,5 +1,6 @@
 package com.cliff2;
 
+import com.cliff2.resources.PersonResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -31,6 +32,7 @@ public class LibraryTwoApplication extends Application<LibraryTwoConfiguration> 
     );
 	//environment.healthChecks().register("template", healthCheck);
     environment.jersey().register(resource);
+    environment.jersey().register(new PersonResource());
     }
 
 }
