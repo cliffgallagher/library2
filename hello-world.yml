@@ -1,7 +1,3 @@
-template: Library!
-
-defaultName: Stranger
-
 logging:
   level: INFO
   loggers:
