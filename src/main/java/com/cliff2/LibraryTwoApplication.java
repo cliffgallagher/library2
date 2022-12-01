@@ -2,10 +2,12 @@ package com.cliff2;
 
 import com.cliff2.resources.PersonResource;
 import io.dropwizard.Application;
+import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import com.cliff2.resources.HelloWorldResource;
 import com.cliff2.health.TemplateHealthCheck;
+import org.jdbi.v3.core.Jdbi;
 
 public class LibraryTwoApplication extends Application<LibraryTwoConfiguration> {
 
@@ -27,8 +29,13 @@ public class LibraryTwoApplication extends Application<LibraryTwoConfiguration> 
     public void run(final LibraryTwoConfiguration configuration,
                     final Environment environment) {
 
-	//environment.healthChecks().register("template", healthCheck);
-    environment.jersey().register(new PersonResource());
+        //Register PersonResource
+        final JdbiFactory factory = new JdbiFactory();
+        final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "postgresql");
+
+
+        environment.jersey().register(new PersonResource(jdbi));
+
     }
 
 }
