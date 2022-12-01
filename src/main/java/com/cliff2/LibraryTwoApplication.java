@@ -26,12 +26,8 @@ public class LibraryTwoApplication extends Application<LibraryTwoConfiguration> 
     @Override
     public void run(final LibraryTwoConfiguration configuration,
                     final Environment environment) {
-        final HelloWorldResource resource = new HelloWorldResource(
-        configuration.getTemplate(),
-        configuration.getDefaultName()
-    );
+
 	//environment.healthChecks().register("template", healthCheck);
-    environment.jersey().register(resource);
     environment.jersey().register(new PersonResource());
     }
 
