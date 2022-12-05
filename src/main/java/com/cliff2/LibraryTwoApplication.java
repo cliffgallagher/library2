@@ -1,6 +1,7 @@
 package com.cliff2;
 
 import com.cliff2.resources.PersonResource;
+import com.cliff2.resources.TaskResource;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
@@ -35,7 +36,7 @@ public class LibraryTwoApplication extends Application<LibraryTwoConfiguration> 
 
 
         environment.jersey().register(new PersonResource(jdbi));
-
+        environment.jersey().register(new TaskResource(jdbi));
     }
 
 }
