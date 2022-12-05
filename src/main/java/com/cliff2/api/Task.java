@@ -1,14 +1,16 @@
 package com.cliff2.api;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.ZonedDateTime;
 
 public class Task implements Serializable {
 
     private int externalId;
     private String description;
-    private Instant startTime;
-    private Instant endTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss a") private ZonedDateTime startTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss a") private ZonedDateTime endTime;
 
     public Task() {}
 
@@ -20,9 +22,9 @@ public class Task implements Serializable {
         return description;
     }
 
-    public Instant getStartTime() { return startTime; }
+    public ZonedDateTime getStartTime() { return startTime; }
 
-    public Instant getEndTime() { return endTime; }
+    public ZonedDateTime getEndTime() { return endTime; }
 
     public void setExternalId(int externalId) {
         this.externalId = externalId;
@@ -32,8 +34,8 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public void setStartTime(Instant startTime) { this.startTime = startTime; }
+    public void setStartTime(ZonedDateTime startTime) { this.startTime = startTime; }
 
-    public void setEndTime(Instant endTime) { this.endTime = endTime; }
+    public void setEndTime(ZonedDateTime endTime) { this.endTime = endTime; }
 
 }
