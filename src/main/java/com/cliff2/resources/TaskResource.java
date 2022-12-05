@@ -1,6 +1,7 @@
 package com.cliff2.resources;
 
 import com.cliff2.api.Person;
+import com.cliff2.api.Task;
 import org.jdbi.v3.core.Jdbi;
 
 import javax.ws.rs.GET;
@@ -20,16 +21,16 @@ public class TaskResource {
 
     @GET
     @Produces("application/json")
-    public String getTask() {
+    public Response getTask() {
 
-//        List<Person> people = jdbi.withHandle(handle -> {
-//            return handle.createQuery("SELECT * FROM \"person\" ORDER BY \"name\"")
-//                    .mapToBean(Person.class)
-//                    .list();
-//        });
-//
-//        return Response.status(Response.Status.OK).entity(people).build();
-        return "GET task";
+        List<Task> tasks = jdbi.withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM \"tasks\" ORDER BY \"description\"")
+                    .mapToBean(Task.class)
+                    .list();
+        });
+
+        return Response.status(Response.Status.OK).entity(tasks).build();
+
     }
 
     @POST
