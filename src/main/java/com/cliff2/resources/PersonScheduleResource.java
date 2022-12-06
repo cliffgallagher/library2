@@ -1,5 +1,6 @@
 package com.cliff2.resources;
 
+import com.cliff2.api.PersonSchedule;
 import org.jdbi.v3.core.Jdbi;
 
 import javax.ws.rs.GET;
@@ -19,24 +20,17 @@ public class PersonScheduleResource {
 
     @GET
     @Produces("application/json")
-    public String getPersonSchedule() {
+    public Response getTask() {
 
-        return "GET PersonSchedule";
+        List<PersonSchedule> personSchedules = jdbi.withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM \"person_schedules\" ORDER BY \"start_time\"")
+                    .mapToBean(PersonSchedule.class)
+                    .list();
+        });
+
+        return Response.status(Response.Status.OK).entity(personSchedules).build();
 
     }
-//    @GET
-//    @Produces("application/json")
-//    public Response getTask() {
-//
-//        List<Task> tasks = jdbi.withHandle(handle -> {
-//            return handle.createQuery("SELECT * FROM \"tasks\" ORDER BY \"description\"")
-//                    .mapToBean(Task.class)
-//                    .list();
-//        });
-//
-//        return Response.status(Response.Status.OK).entity(tasks).build();
-//
-//    }
 
 }
 
