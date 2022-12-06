@@ -53,5 +53,11 @@ public class PersonScheduleResource {
 
     }
 
+    @POST
+    public String postPersonSchedule() {
+        System.out.println("postPersonSchedule triggered");
+        return "POST PersonSchedule";
+    }
+
 }
 
