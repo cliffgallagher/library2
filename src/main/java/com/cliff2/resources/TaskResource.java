@@ -1,6 +1,5 @@
 package com.cliff2.resources;
 
-import com.cliff2.api.Person;
 import com.cliff2.api.Task;
 import org.jdbi.v3.core.Jdbi;
 
