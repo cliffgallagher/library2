@@ -9,8 +9,8 @@ public class Task implements Serializable {
 
     private int externalId;
     private String description;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss a") private ZonedDateTime startTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss a") private ZonedDateTime endTime;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss a") private ZonedDateTime startTime;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss a") private ZonedDateTime endTime;
 
     public Task() {}
 
@@ -22,9 +22,9 @@ public class Task implements Serializable {
         return description;
     }
 
-    public ZonedDateTime getStartTime() { return startTime; }
-
-    public ZonedDateTime getEndTime() { return endTime; }
+//    public ZonedDateTime getStartTime() { return startTime; }
+//
+//    public ZonedDateTime getEndTime() { return endTime; }
 
     public void setExternalId(int externalId) {
         this.externalId = externalId;
@@ -34,8 +34,8 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public void setStartTime(ZonedDateTime startTime) { this.startTime = startTime; }
-
-    public void setEndTime(ZonedDateTime endTime) { this.endTime = endTime; }
+//    public void setStartTime(ZonedDateTime startTime) { this.startTime = startTime; }
+//
+//    public void setEndTime(ZonedDateTime endTime) { this.endTime = endTime; }
 
 }
