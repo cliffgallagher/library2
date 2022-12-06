@@ -8,6 +8,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import java.time.ZonedDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Path("/personschedule")
@@ -54,9 +56,17 @@ public class PersonScheduleResource {
     }
 
     @POST
-    public String postPersonSchedule() {
-        System.out.println("postPersonSchedule triggered");
-        return "POST PersonSchedule";
+    public Response postPersonSchedule(LinkedHashMap incomingBody) {
+        Object[] array = incomingBody.values().toArray();
+        Integer incomingPersonId = (Integer) array[0];
+        Integer incomingTaskId = (Integer) array[1];
+        ZonedDateTime incomingStartDate = ZonedDateTime.parse(array[2].toString());
+        ZonedDateTime incomingEndDate = ZonedDateTime.parse(array[3].toString());
+
+        int result = jdbi.withHandle(handle -> {
+            return handle.execute("INSERT INTO person_schedules (person_id, task_id, start_time, end_time) VALUES (?, ?, ?, ?)", incomingPersonId, incomingTaskId, incomingStartDate, incomingEndDate);
+        });
+        return Response.status(Response.Status.fromStatusCode(201)).entity(result).build();
     }
 
 }
