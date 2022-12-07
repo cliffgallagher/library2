@@ -3,6 +3,7 @@ package com.cliff2.resources;
 import com.cliff2.api.PersonSchedule;
 import org.jdbi.v3.core.Jdbi;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -73,6 +74,16 @@ public class PersonScheduleResource {
             return handle.execute("INSERT INTO person_schedules (person_id, task_id, start_time, end_time) VALUES (?, ?, ?, ?)", incomingPersonId, incomingTaskId, incomingStartDate, incomingEndDate);
         });
         return Response.status(Response.Status.fromStatusCode(201)).entity(result).build();
+    }
+
+    @DELETE
+    public Response deletePersonSchedule() {
+//        return "DELETE PersonSchedule";
+        jdbi.withHandle(handle -> {
+            return handle.execute("DELETE FROM person_schedules WHERE external_id = ?", 61);
+        });
+
+        return Response.status(Response.Status.fromStatusCode(204)).build();
     }
 
 }
