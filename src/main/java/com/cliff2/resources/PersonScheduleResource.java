@@ -79,6 +79,7 @@ public class PersonScheduleResource {
     @DELETE
     public Response deletePersonSchedule(LinkedHashMap incomingBody) {
         Object[] array = incomingBody.values().toArray();
+
         for (Object obj : array) {
             System.out.println(obj.toString());
         }
