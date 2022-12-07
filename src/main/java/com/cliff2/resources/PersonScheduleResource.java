@@ -59,8 +59,11 @@ public class PersonScheduleResource {
     @POST
     public Response postPersonSchedule(LinkedHashMap incomingBody) {
         Object[] array = incomingBody.values().toArray();
+        for (Object obj : array) {
+            System.out.println(obj.toString());
+        }
         Integer incomingPersonId = Integer.parseInt((String)array[0]);
-        Integer incomingTaskId = (Integer) array[1];
+        Integer incomingTaskId = Integer.parseInt((String)array[1]);;
         LocalDateTime incomingStartDate = LocalDateTime.parse(array[2].toString());
         LocalDateTime incomingEndDate = LocalDateTime.parse(array[3].toString());
 
