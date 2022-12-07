@@ -8,6 +8,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -60,8 +61,10 @@ public class PersonScheduleResource {
         Object[] array = incomingBody.values().toArray();
         Integer incomingPersonId = (Integer) array[0];
         Integer incomingTaskId = (Integer) array[1];
-        ZonedDateTime incomingStartDate = ZonedDateTime.parse(array[2].toString());
-        ZonedDateTime incomingEndDate = ZonedDateTime.parse(array[3].toString());
+        LocalDateTime incomingStartDate = LocalDateTime.parse(array[2].toString());
+        LocalDateTime incomingEndDate = LocalDateTime.parse(array[3].toString());
+
+        System.out.println("startTime: " + incomingStartDate);
 
         int result = jdbi.withHandle(handle -> {
             return handle.execute("INSERT INTO person_schedules (person_id, task_id, start_time, end_time) VALUES (?, ?, ?, ?)", incomingPersonId, incomingTaskId, incomingStartDate, incomingEndDate);

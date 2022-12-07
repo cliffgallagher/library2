@@ -3,6 +3,7 @@ package com.cliff2.api;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 public class PersonSchedule implements Serializable {
@@ -12,8 +13,8 @@ public class PersonSchedule implements Serializable {
     private String personName;
     private int taskId;
     private String taskDescription;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss a") private ZonedDateTime startTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss a") private ZonedDateTime endTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss a") private LocalDateTime startTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss a") private LocalDateTime endTime;
 
     public PersonSchedule() {}
 
@@ -24,8 +25,8 @@ public class PersonSchedule implements Serializable {
     public String getPersonName() {return personName;}
     public int getTaskId() {return taskId;}
     public String getTaskDescription() {return taskDescription;}
-    public ZonedDateTime getStartTime() { return startTime; }
-    public ZonedDateTime getEndTime() { return endTime; }
+    public LocalDateTime getStartTime() { return startTime; }
+    public LocalDateTime getEndTime() { return endTime; }
 
     public void setExternalId(int externalId) {
         this.externalId = externalId;
@@ -34,7 +35,7 @@ public class PersonSchedule implements Serializable {
     public void setPersonName(String personName) {this.personName = personName;}
     public void setTaskId(int taskId) {this.taskId = taskId;}
     public void setTaskDescription(String taskDescription) {this.taskDescription = taskDescription;}
-    public void setStartTime(ZonedDateTime startTime) { this.startTime = startTime; }
-    public void setEndTime(ZonedDateTime endTime) { this.endTime = endTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
 
 }
