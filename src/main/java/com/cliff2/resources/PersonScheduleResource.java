@@ -77,10 +77,15 @@ public class PersonScheduleResource {
     }
 
     @DELETE
-    public Response deletePersonSchedule() {
+    public Response deletePersonSchedule(LinkedHashMap incomingBody) {
+        Object[] array = incomingBody.values().toArray();
+        for (Object obj : array) {
+            System.out.println(obj.toString());
+        }
+        Integer incomingPersonId = (Integer) array[0];
 //        return "DELETE PersonSchedule";
         jdbi.withHandle(handle -> {
-            return handle.execute("DELETE FROM person_schedules WHERE external_id = ?", 61);
+            return handle.execute("DELETE FROM person_schedules WHERE external_id = ?", incomingPersonId);
         });
 
         return Response.status(Response.Status.fromStatusCode(204)).build();
