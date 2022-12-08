@@ -62,24 +62,17 @@ public class PersonScheduleResource {
     }
 
     @POST
-    public Response postPersonSchedule(PersonSchedule incomingBody) {
-        System.out.println(incomingBody);
-        return Response.ok(incomingBody).build();
-//        Object[] array = incomingBody.values().toArray();
-//        for (Object obj : array) {
-//            System.out.println(obj.toString());
-//        }
-//        Integer incomingPersonId = Integer.parseInt((String)array[0]);
-//        Integer incomingTaskId = Integer.parseInt((String)array[1]);;
-//        LocalDateTime incomingStartDate = LocalDateTime.parse(array[2].toString());
-//        LocalDateTime incomingEndDate = LocalDateTime.parse(array[3].toString());
-//
-//        System.out.println("startTime: " + incomingStartDate);
-//
-//        int result = jdbi.withHandle(handle -> {
-//            return handle.execute("INSERT INTO person_schedules (person_id, task_id, start_time, end_time) VALUES (?, ?, ?, ?)", incomingPersonId, incomingTaskId, incomingStartDate, incomingEndDate);
-//        });
-//        return Response.status(Response.Status.fromStatusCode(201)).entity(result).build();
+    public Response postPersonSchedule(PersonSchedule incomingPersonSchedule) {
+
+        Integer incomingPersonId = incomingPersonSchedule.getPersonId();
+        Integer incomingTaskId = incomingPersonSchedule.getTaskId();
+        LocalDateTime incomingStartTime = incomingPersonSchedule.getStartTime();
+        LocalDateTime incomingEndTime = incomingPersonSchedule.getEndTime();
+
+        int result = jdbi.withHandle(handle -> {
+            return handle.execute("INSERT INTO person_schedules (person_id, task_id, start_time, end_time) VALUES (?, ?, ?, ?)", incomingPersonId, incomingTaskId, incomingStartTime, incomingEndTime);
+        });
+        return Response.status(Response.Status.fromStatusCode(201)).entity(result).build();
     }
 
     @DELETE
