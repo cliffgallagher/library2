@@ -3,6 +3,7 @@ package com.cliff2.resources;
 import com.cliff2.api.Person;
 import com.cliff2.api.PersonSchedule;
 import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.core.Handle;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
+import com.cliff2.api.PersonScheduleMapper;
 
 @Path("/personschedule")
 @Produces(MediaType.APPLICATION_JSON)
@@ -69,10 +71,27 @@ public class PersonScheduleResource {
         LocalDateTime incomingStartTime = incomingPersonSchedule.getStartTime();
         LocalDateTime incomingEndTime = incomingPersonSchedule.getEndTime();
 
-        int result = jdbi.withHandle(handle -> {
-            return handle.execute("INSERT INTO person_schedules (person_id, task_id, start_time, end_time) VALUES (?, ?, ?, ?)", incomingPersonId, incomingTaskId, incomingStartTime, incomingEndTime);
+        PersonSchedule inserted = jdbi.registerRowMapper
+                (PersonSchedule.class,
+                    (rs, ctx) -> {
+                        PersonSchedule schedule = new PersonSchedule();
+                        schedule.setPersonId(rs.getInt("person_id"));
+                        schedule.setTaskId(rs.getInt("task_id"));
+    //        schedule.setStartTime(LocalDateTime.parse(rs.getString("start_time")));
+    //        schedule.setEndTime(rs.getTimestamp("end_time"));
+                        return schedule;
+                    }
+                ).withHandle(handle -> {
+            return handle.createUpdate("INSERT INTO person_schedules (person_id, task_id, start_time, end_time) VALUES (?, ?, ?, ?)")
+                    .bind(0, incomingPersonId)
+                    .bind(1, incomingTaskId)
+                    .bind(2, incomingStartTime)
+                    .bind(3, incomingEndTime)
+                    .executeAndReturnGeneratedKeys()
+                    .mapTo(PersonSchedule.class)
+                    .one();
         });
-        return Response.status(Response.Status.fromStatusCode(201)).entity(result).build();
+        return Response.status(Response.Status.fromStatusCode(201)).entity(inserted).build();
     }
 
     @DELETE
