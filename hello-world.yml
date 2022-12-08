@@ -1,8 +1,0 @@
-template: Library!
-
-defaultName: Stranger
-
-logging:
-  level: INFO
-  loggers:
-    com.cliff2: DEBUG
