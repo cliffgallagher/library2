@@ -72,7 +72,7 @@ public class PersonScheduleResource {
         LocalDateTime incomingStartTime = incomingPersonSchedule.getStartTime();
         LocalDateTime incomingEndTime = incomingPersonSchedule.getEndTime();
 
-        boolean isConflict = PersonScheduleHelper.isScheduleConflict();
+        boolean isConflict = PersonScheduleHelper.isScheduleConflict(this.jdbi, incomingPersonSchedule);
 
         if (isConflict) {
             return Response.status(409).entity("This person is already scheduled for a task during this time").build();
