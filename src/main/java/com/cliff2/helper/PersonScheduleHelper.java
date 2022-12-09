@@ -13,6 +13,7 @@ public class PersonScheduleHelper {
         //get personId of incomingPersonSchedule
         int personId = incomingPersonSchedule.getPersonId();
 
+        //get that person's existing PersonSchedules
         List<PersonSchedule> personSchedules = jdbi.withHandle(handle -> {
             return handle.select("SELECT * FROM person_schedules WHERE person_id = ?", personId)
                     .mapToBean(PersonSchedule.class)
@@ -20,9 +21,11 @@ public class PersonScheduleHelper {
         });
 
         for (PersonSchedule personSchedule : personSchedules) {
-            System.out.println(personSchedule.getTaskId());
+            if (incomingPersonSchedule.getEndTime().isAfter(personSchedule.getStartTime()) && incomingPersonSchedule.getStartTime().isBefore(personSchedule.getEndTime())) {
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
 }
