@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import com.cliff2.api.PersonScheduleMapper;
@@ -66,16 +67,23 @@ public class PersonScheduleResource {
 
     @POST
     public Response postPersonSchedule(PersonSchedule incomingPersonSchedule) {
+        List<String> errorMessages = new ArrayList<>();
 
         Integer incomingPersonId = incomingPersonSchedule.getPersonId();
         Integer incomingTaskId = incomingPersonSchedule.getTaskId();
         LocalDateTime incomingStartTime = incomingPersonSchedule.getStartTime();
         LocalDateTime incomingEndTime = incomingPersonSchedule.getEndTime();
 
+        if (incomingEndTime.isBefore(incomingStartTime)) {
+            errorMessages.add("Start time must be before end time.");
+            return Response.status(400).entity(errorMessages).build();
+        }
+
         boolean isConflict = PersonScheduleHelper.isScheduleConflict(this.jdbi, incomingPersonSchedule);
 
         if (isConflict) {
-            return Response.status(409).entity("This person is already scheduled for a task during this time").build();
+            errorMessages.add("This person is already scheduled for a task during this time");
+            return Response.status(409).entity(errorMessages).build();
         }
 
         PersonSchedule inserted = jdbi.registerRowMapper

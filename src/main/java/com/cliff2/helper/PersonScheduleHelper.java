@@ -20,6 +20,7 @@ public class PersonScheduleHelper {
                     .list();
         });
 
+        //if there is a conflicting schedule, return true. Otherwise, return false
         for (PersonSchedule personSchedule : personSchedules) {
             if (incomingPersonSchedule.getEndTime().isAfter(personSchedule.getStartTime()) && incomingPersonSchedule.getStartTime().isBefore(personSchedule.getEndTime())) {
                 return true;
