@@ -2,6 +2,7 @@ package com.cliff2.resources;
 
 import com.cliff2.api.Person;
 import com.cliff2.api.PersonSchedule;
+import com.cliff2.helper.PersonScheduleHelper;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.Handle;
 
@@ -71,16 +72,21 @@ public class PersonScheduleResource {
         LocalDateTime incomingStartTime = incomingPersonSchedule.getStartTime();
         LocalDateTime incomingEndTime = incomingPersonSchedule.getEndTime();
 
+        boolean isConflict = PersonScheduleHelper.isScheduleConflict();
+
+        if (isConflict) {
+            return Response.status(409).entity("This person is already scheduled for a task during this time").build();
+        }
+
         PersonSchedule inserted = jdbi.registerRowMapper
                 (PersonSchedule.class,
-                    (rs, ctx) -> {
-                        PersonSchedule schedule = new PersonSchedule();
-                        schedule.setPersonId(rs.getInt("person_id"));
-                        schedule.setTaskId(rs.getInt("task_id"));
-    //        schedule.setStartTime(LocalDateTime.parse(rs.getString("start_time")));
-    //        schedule.setEndTime(rs.getTimestamp("end_time"));
-                        return schedule;
-                    }
+                        (rs, ctx) -> {
+                            PersonSchedule schedule = new PersonSchedule();
+                            schedule.setPersonId(rs.getInt("person_id"));
+                            schedule.setTaskId(rs.getInt("task_id"));
+                            // TODO return start date and end date in response
+                            return schedule;
+                        }
                 ).withHandle(handle -> {
             return handle.createUpdate("INSERT INTO person_schedules (person_id, task_id, start_time, end_time) VALUES (?, ?, ?, ?)")
                     .bind(0, incomingPersonId)
@@ -92,6 +98,7 @@ public class PersonScheduleResource {
                     .one();
         });
         return Response.status(Response.Status.fromStatusCode(201)).entity(inserted).build();
+
     }
 
     @DELETE
