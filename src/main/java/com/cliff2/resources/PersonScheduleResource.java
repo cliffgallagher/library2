@@ -109,6 +109,39 @@ public class PersonScheduleResource {
 
     }
 
+    @POST
+    @Path("/confirmed")
+    public Response postPersonScheduleConfirmed(PersonSchedule incomingPersonSchedule) {
+        List<String> errorMessages = new ArrayList<>();
+
+        Integer incomingPersonId = incomingPersonSchedule.getPersonId();
+        Integer incomingTaskId = incomingPersonSchedule.getTaskId();
+        LocalDateTime incomingStartTime = incomingPersonSchedule.getStartTime();
+        LocalDateTime incomingEndTime = incomingPersonSchedule.getEndTime();
+
+        PersonSchedule inserted = jdbi.registerRowMapper
+                (PersonSchedule.class,
+                        (rs, ctx) -> {
+                            PersonSchedule schedule = new PersonSchedule();
+                            schedule.setPersonId(rs.getInt("person_id"));
+                            schedule.setTaskId(rs.getInt("task_id"));
+                            // TODO return start date and end date in response
+                            return schedule;
+                        }
+                ).withHandle(handle -> {
+            return handle.createUpdate("INSERT INTO person_schedules (person_id, task_id, start_time, end_time) VALUES (?, ?, ?, ?)")
+                    .bind(0, incomingPersonId)
+                    .bind(1, incomingTaskId)
+                    .bind(2, incomingStartTime)
+                    .bind(3, incomingEndTime)
+                    .executeAndReturnGeneratedKeys()
+                    .mapTo(PersonSchedule.class)
+                    .one();
+        });
+        return Response.status(Response.Status.fromStatusCode(201)).entity(inserted).build();
+
+    }
+
     @DELETE
     public Response deletePersonSchedule(LinkedHashMap incomingBody) {
         Object[] array = incomingBody.values().toArray();
